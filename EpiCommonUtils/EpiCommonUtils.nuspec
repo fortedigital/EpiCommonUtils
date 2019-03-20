@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Forte.EpiCommonUtils</id>
+    <version>$version$</version>
+    <description>A set of common utils to make your day to day EpiServer development easier</description>
+    <title>Forte.EpiCommonUtils</title>
+    <authors>Forte_ Digital</authors>
+    <owners>$author$</owners>
+    <projectUrl>http://github.com/fortedigital/EpiCommonUtils/</projectUrl>
+    <licenseUrl>https://github.com/fortedigital/EpiCommonUtils/blob/master/LICENSE</licenseUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+  </metadata>
+</package>
