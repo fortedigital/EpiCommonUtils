@@ -8,6 +8,7 @@
     <authors>Forte_ Digital</authors>
     <owners>$author$</owners>
     <projectUrl>http://github.com/fortedigital/EpiCommonUtils/</projectUrl>
+    <license type="expression">MIT</license>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
   </metadata>
 </package>

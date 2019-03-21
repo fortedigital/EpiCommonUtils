@@ -2,6 +2,10 @@
 
 This is a set of common stuff which might be helpfull with your day to day EpiServer work
 
+## Installation
+
+It's available as a [nuget package](https://www.nuget.org/packages/Forte.EpiCommonUtils/)
+ 
 #### HostingEnvironment
 
 Offers several flags saying on which environment solution is working on. It's based on `episerver:EnvironmentName` appSetting:
