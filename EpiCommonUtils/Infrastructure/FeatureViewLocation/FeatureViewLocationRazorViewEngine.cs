@@ -4,6 +4,17 @@ using JetBrains.Annotations;
 [assembly: AspMvcViewLocationFormat("~/Features/Pages/{1}/{0}.cshtml")]
 [assembly: AspMvcViewLocationFormat("~/Features/Pages/{1}/{1}.cshtml")]
 [assembly: AspMvcViewLocationFormat("~/Features/{1}/{0}.cshtml")]
+
+[assembly: AspMvcMasterLocationFormat("~/Features/Layouts/{0}.cshtml")]
+
+[assembly: AspMvcPartialViewLocationFormat("~/Features/{0}.cshtml")]
+[assembly: AspMvcPartialViewLocationFormat("~/Features/{1}/{0}.cshtml")]
+[assembly: AspMvcPartialViewLocationFormat("~/Features/Blocks/{1}/{0}.cshtml")]
+[assembly: AspMvcPartialViewLocationFormat("~/Features/Blocks/{0}/Index.cshtml")]
+[assembly: AspMvcPartialViewLocationFormat("~/Features/Partials/{0}.cshtml")]
+[assembly: AspMvcPartialViewLocationFormat("~/Features/Partials/{0}/{0}.cshtml")]
+[assembly: AspMvcPartialViewLocationFormat("~/Features/Partials/{1}/{0}.cshtml")]
+
 namespace Forte.EpiCommonUtils.Infrastructure.FeatureViewLocation
 {
     public class FeatureViewLocationRazorViewEngine : RazorViewEngine

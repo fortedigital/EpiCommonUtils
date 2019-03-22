@@ -18,7 +18,7 @@ namespace Forte.EpiCommonUtils.Infrastructure
 
                 _webpackDevServerUrl = ConfigurationManager.AppSettings["webpack:devServerUrl"];
 
-                return _webpackDevServerUrl ?? "https://localhost:8080/dist/";
+                return _webpackDevServerUrl ?? "http://localhost:8080/dist/";
             }
             
             set => _webpackDevServerUrl = value;
