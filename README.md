@@ -40,3 +40,19 @@ Check source code of `FeatureViewLocationRazorEngine` for path details.
 
 This is by default initialized by EpiServer startup. You can disable this initialization by setting up `appSetting` called `epiCommonUtils:disableFeatureViewLocationRazor` with value `true`
 
+#### StructureMap - DependencyInjection
+
+In order for `StructureMap` to work as your Dependency Injection container you must register it - separately for MVC and WebApi controllers.
+This package will do it for you by default. 
+
+If you wish to disable this registration you can do it by setting flags in `appSettings`:
+
+```xml
+
+<appSettings>
+    <!-- Disable MVC registration -->
+    <add key="epiCommonUtils:disableStructureMapMvcRegistration" value="true" />
+    <!-- Disable WebApi registration -->
+    <add key="epiCommonUtils:disableStructureMapWebApiRegistration" value="true" />
+</appSettings>
+``` 
