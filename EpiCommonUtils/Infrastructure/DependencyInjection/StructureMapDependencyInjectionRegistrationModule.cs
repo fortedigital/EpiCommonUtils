@@ -34,25 +34,15 @@ namespace Forte.EpiCommonUtils.Infrastructure.DependencyInjection
 
             if (disableStructureMapMvcRegistration == null || bool.Parse(disableStructureMapMvcRegistration) == false)
             {
-                RegisterMvcDependencyResolver(resolver);                
+                DependencyResolver.SetResolver(resolver);                
             }
 
             if (disableStructureMapWebApiRegistration == null || bool.Parse(disableStructureMapWebApiRegistration) == false)
             {
-                RegisterWebApiDependencyResolver(resolver);                
+                GlobalConfiguration.Configuration.DependencyResolver = resolver;                
             }
         }
 
-        private static void RegisterMvcDependencyResolver(IDependencyResolver resolver)
-        {
-            DependencyResolver.SetResolver(resolver);
-        }
-
-        private static void RegisterWebApiDependencyResolver(IDependencyResolver resolver)
-        {
-            GlobalConfiguration.Configuration.DependencyResolver = resolver;
-        }
-        
         private class StructureMapDependencyResolver : StructureMapDependencyScope, IDependencyResolver, System.Web.Mvc.IDependencyResolver
         {
             public StructureMapDependencyResolver(IContainer container) : base(container)
