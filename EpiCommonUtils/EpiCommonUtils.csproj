@@ -208,6 +208,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Infrastructure\CacheWarmup\CacheWarmupController.cs" />
+    <Compile Include="Infrastructure\ContentReferenceExtensions.cs" />
     <Compile Include="Infrastructure\DependencyInjection\StructureMapDependencyInjectionRegistrationModule.cs" />
     <Compile Include="Infrastructure\FeatureViewLocation\FeatureViewLocationRazorViewEngine.cs" />
     <Compile Include="Infrastructure\FeatureViewLocation\FeatureViewLocationRazorViewEngineInitializationModule.cs" />

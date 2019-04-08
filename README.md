@@ -5,6 +5,13 @@ This is a set of common stuff which might be helpfull with your day to day EpiSe
 ## Installation
 
 It's available as a [nuget package](https://www.nuget.org/packages/Forte.EpiCommonUtils/)
+
+## Features included:
+
+1. [Hosting Environment](#hostingenvironment)
+2. [Webpack](#webpack)
+3. [FeatureViewLocationRazorEngine](#featureviewlocationrazorengine)
+4. [Cache Warmup](#cache-warmup)
  
 #### HostingEnvironment
 
@@ -56,3 +63,29 @@ If you wish to disable this registration you can do it by setting flags in `appS
     <add key="epiCommonUtils:disableStructureMapWebApiRegistration" value="true" />
 </appSettings>
 ``` 
+
+#### Cache Warmup
+
+After application is started a lot of cache is still not warmup up - [Read more](https://docs.microsoft.com/en-us/iis/get-started/whats-new-in-iis-8/iis-80-application-initialization). 
+
+This package adds and registeres `cache-warmup/warmup` url.
+By visiting (sending GET request) this endpoint you will trigger an action which will:
+1. try to find all PageTypes registered in your EpiServer installation,
+2. get one url for every usage of a PageType
+3. send request to such url so cache is warmed up
+ 
+After cache is warmup up (url has been visited after application startup) this endpoint will just return empty response without performing any action.
+
+You may want to set up your IIS to visit `cache-warmup/warmup` as a part of application initialization. 
+To do so it's best to set up configuration transformation:
+
+```xml
+<configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
+  <system.webServer xdt:Transform="InsertIfMissing">
+    <applicationInitialization xdt:Transform="Remove" />
+    <applicationInitialization xdt:Transform="InsertIfMissing">
+      <add initializationPage="/cache-warmup/warmup" xdt:Transform="InsertIfMissing" />
+    </applicationInitialization>
+  </system.webServer>
+</configuration> 
+```
