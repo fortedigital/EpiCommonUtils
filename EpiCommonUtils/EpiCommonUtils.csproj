@@ -126,6 +126,7 @@
       <HintPath>..\packages\System.ComponentModel.Annotations.4.4.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -212,6 +213,11 @@
     <Compile Include="Infrastructure\FeatureViewLocation\FeatureViewLocationRazorViewEngine.cs" />
     <Compile Include="Infrastructure\FeatureViewLocation\FeatureViewLocationRazorViewEngineInitializationModule.cs" />
     <Compile Include="Infrastructure\HostingEnvironment.cs" />
+    <Compile Include="Infrastructure\Model\ImageBase.cs" />
+    <Compile Include="Infrastructure\ResizedImage\ExtendedPictureProfile.cs" />
+    <Compile Include="Infrastructure\ResizedImage\ImageTransformationHelper.cs" />
+    <Compile Include="Infrastructure\ResizedImage\ScaleMode.cs" />
+    <Compile Include="Infrastructure\ResizedImage\UrlBuilderExtensions.cs" />
     <Compile Include="Infrastructure\Webpack.cs" />
     <Compile Include="Infrastructure\WebpackManifest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

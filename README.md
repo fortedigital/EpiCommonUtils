@@ -56,3 +56,66 @@ If you wish to disable this registration you can do it by setting flags in `appS
     <add key="epiCommonUtils:disableStructureMapWebApiRegistration" value="true" />
 </appSettings>
 ``` 
+
+#### Image html helpers
+
+There are two html helpers method registered. Both of them make use of `ExtendedPictureProfile` class which is also a part of this package:
+
+```c#
+public class ExtendedPictureProfile
+{
+    public int DefaultWidth { get; set; }
+    public int[] SrcSetWidths { get; set; }
+    public string[] SrcSetSizes { get; set; }
+    public int? MaxHeight { get; set; }
+    public ScaleMode Mode { get; set; }
+    public int? Quality { get; set; }
+}
+```
+
+**ResizedImageUrl**
+
+This will generate url to resized image. Example usage (`Model` is supposed to be `ContentReference` instance):
+```razor
+<img src="@Html.ResizedImageUrl(Model, 2048, 1000, new ExtendedPictureProfile{Mode = ScaleMode.Crop})" />
+```
+
+**ResizedPictureExtended**
+
+_NOTE: In order this method to load `alt` element properly Image property should be of type `Forte.EpiCommonUtils.Infrastructure.Model.ImageBase`_
+
+This will generate `picture` element with responsive support. So, having defined this (there's no predefined profiles in this package) :
+
+```c#
+public static class ExtendedPictureProfiles
+{
+    public static readonly ExtendedPictureProfile Hero = new ExtendedPictureProfile
+    {
+        DefaultWidth = 1500,
+        SrcSetWidths = new[] { 400, 800, 1200, 1600 },
+        SrcSetSizes = new[]
+        {
+            "(min-width: 1200px) 1400px",
+            "(min-width: 1140px) 1140px",
+            "(max-width: 1139px) 100vw",
+        },           
+        Mode = ScaleMode.Crop,
+        Quality = 60
+    };
+}
+``` 
+
+by doing this:
+
+```razor
+@Html.ResizedPictureExtended(Model, ExtendedPictureProfiles.Hero)
+```
+
+you will get this piece of markup:
+```html
+<picture>
+    <source sizes="(min-width: 1200px) 1400px, (min-width: 1140px) 1140px, (max-width: 1139px) 100vw" srcset="/contentassets/92a71a8e82a94be3ab5581d099a68f48/1.jpg?w=400&mode=crop&quality=60 400w, /contentassets/92a71a8e82a94be3ab5581d099a68f48/1.jpg?w=800&mode=crop&quality=60 800w, /contentassets/92a71a8e82a94be3ab5581d099a68f48/1.jpg?w=1200&mode=crop&quality=60 1200w, /contentassets/92a71a8e82a94be3ab5581d099a68f48/1.jpg?w=1600&mode=crop&quality=60 1600w" />
+    <img alt="alternate custom" data-object-fit="cover" data-object-position="center" src="/contentassets/92a71a8e82a94be3ab5581d099a68f48/1.jpg?w=1500&mode=crop&quality=60" />
+</picture>
+
+```
