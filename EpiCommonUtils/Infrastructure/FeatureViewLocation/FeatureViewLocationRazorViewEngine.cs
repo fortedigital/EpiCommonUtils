@@ -42,6 +42,7 @@ namespace Forte.EpiCommonUtils.Infrastructure.FeatureViewLocation
                 "~/Features/Partials/{0}.cshtml",
                 "~/Features/Partials/{0}/{0}.cshtml",
                 "~/Features/Partials/{1}/{0}.cshtml",
+                "~/Features/Partials/{1}/{1}.cshtml",
             };
         }
     }
