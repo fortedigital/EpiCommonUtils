@@ -55,6 +55,16 @@ namespace Forte.EpiCommonUtils.Infrastructure
 
             return JsonConvert.DeserializeObject<Dictionary<string, Entry>>(File.ReadAllText(manifestAbsolutePath), serializerSettings);
         }
+        
+        public static Entry GetEntry(string key)
+        {
+            if (instance.Value.TryGetValue(key, out var value) == false)
+            {
+                throw new InvalidOperationException($"Key {key} not found in manifest file.");
+            }
+
+            return value;
+        }
 
         public class Entry
         {
