@@ -59,10 +59,10 @@ If you wish to disable this registration you can do it by setting flags in `appS
 
 #### Image html helpers
 
-There are two html helpers method registered. Both of them make use of `ExtendedPictureProfile` class which is also a part of this package:
+There are two html helpers method registered. Both of them make use of `PictureProfile` class which is also a part of this package:
 
 ```c#
-public class ExtendedPictureProfile
+public class PictureProfile
 {
     public int DefaultWidth { get; set; }
     public int[] SrcSetWidths { get; set; }
@@ -77,19 +77,19 @@ public class ExtendedPictureProfile
 
 This will generate url to resized image. Example usage (`Model` is supposed to be `ContentReference` instance):
 ```razor
-<img src="@Html.ResizedImageUrl(Model, 2048, 1000, new ExtendedPictureProfile{Mode = ScaleMode.Crop})" />
+<img src="@Html.ResizedImageUrl(Model, 2048, 1000, new PictureProfile{Mode = ScaleMode.Crop})" />
 ```
 
-**ResizedPictureExtended**
+**ResizedPicture**
 
 _NOTE: In order this method to load `alt` element properly Image property should be of type `Forte.EpiCommonUtils.Infrastructure.Model.ImageBase`_
 
 This will generate `picture` element with responsive support. So, having defined this (there's no predefined profiles in this package) :
 
 ```c#
-public static class ExtendedPictureProfiles
+public static class PictureProfiles
 {
-    public static readonly ExtendedPictureProfile Hero = new ExtendedPictureProfile
+    public static readonly PictureProfile Hero = new PictureProfile
     {
         DefaultWidth = 1500,
         SrcSetWidths = new[] { 400, 800, 1200, 1600 },
@@ -108,7 +108,7 @@ public static class ExtendedPictureProfiles
 by doing this:
 
 ```razor
-@Html.ResizedPictureExtended(Model, ExtendedPictureProfiles.Hero)
+@Html.ResizedPicture(Model, PictureProfiles.Hero)
 ```
 
 you will get this piece of markup:

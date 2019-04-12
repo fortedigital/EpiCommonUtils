@@ -1,6 +1,6 @@
 namespace Forte.EpiCommonUtils.Infrastructure.ResizedImage
 {
-    public class ExtendedPictureProfile
+    public class PictureProfile
     {
         public int DefaultWidth { get; set; }
         public int[] SrcSetWidths { get; set; }

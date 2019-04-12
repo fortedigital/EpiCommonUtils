@@ -11,7 +11,7 @@ namespace Forte.EpiCommonUtils.Infrastructure.ResizedImage
 {
     public static class ImageTransformationHelper
     {
-        public static UrlBuilder ResizedImageUrl(this HtmlHelper helper, ContentReference image, int width, int? height = null, [CanBeNull] ExtendedPictureProfile profile = null)
+        public static UrlBuilder ResizedImageUrl(this HtmlHelper helper, ContentReference image, int width, int? height = null, [CanBeNull] PictureProfile profile = null)
         {
             var baseUrl = ResolveImageUrl(image);
             
@@ -23,7 +23,7 @@ namespace Forte.EpiCommonUtils.Infrastructure.ResizedImage
             return UrlResolver.Current.GetUrl(image);
         }
         
-        private static UrlBuilder BuildResizedImageUrl(string imageUrl, int? width, int? height, ExtendedPictureProfile profile)
+        private static UrlBuilder BuildResizedImageUrl(string imageUrl, int? width, int? height, PictureProfile profile)
         {
             var target = new UrlBuilder(imageUrl);
 
@@ -47,10 +47,10 @@ namespace Forte.EpiCommonUtils.Infrastructure.ResizedImage
             return target;
         }
         
-        public static MvcHtmlString ResizedPictureExtended(
+        public static MvcHtmlString ResizedPicture(
             this HtmlHelper helper,
             ContentReference image,
-            ExtendedPictureProfile profile,
+            PictureProfile profile,
             string fallbackUrl = null,
             string additionalCssClass = null)
         {
@@ -66,7 +66,7 @@ namespace Forte.EpiCommonUtils.Infrastructure.ResizedImage
         }
         
         private static MvcHtmlString GenerateResizedPicture(string imageBaseUrl,
-            ExtendedPictureProfile profile, string alternateText, string additionalCssClass)
+            PictureProfile profile, string alternateText, string additionalCssClass)
         {
             var urlBuilder = BuildResizedImageUrl(imageBaseUrl, profile.DefaultWidth, null, profile);
             var sourceSets = profile.SrcSetWidths.Select(w => FormatSourceSet(imageBaseUrl, w, profile)).ToArray();
@@ -75,7 +75,7 @@ namespace Forte.EpiCommonUtils.Infrastructure.ResizedImage
                 additionalCssClass);
         }
         
-        private static MvcHtmlString GeneratePictureElement(ExtendedPictureProfile profile,
+        private static MvcHtmlString GeneratePictureElement(PictureProfile profile,
             string imgUrl,
             string[] sourceSets,
             string alternateText,
@@ -116,7 +116,7 @@ namespace Forte.EpiCommonUtils.Infrastructure.ResizedImage
             return tagBuilder;
         }
         
-        private static string FormatSourceSet(string imageUrl, int width, ExtendedPictureProfile profile)
+        private static string FormatSourceSet(string imageUrl, int width, PictureProfile profile)
         {
             var url = BuildResizedImageUrl(imageUrl, width, null, profile);
             return $"{url} {width}w";

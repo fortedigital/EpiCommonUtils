@@ -214,7 +214,7 @@
     <Compile Include="Infrastructure\FeatureViewLocation\FeatureViewLocationRazorViewEngineInitializationModule.cs" />
     <Compile Include="Infrastructure\HostingEnvironment.cs" />
     <Compile Include="Infrastructure\Model\ImageBase.cs" />
-    <Compile Include="Infrastructure\ResizedImage\ExtendedPictureProfile.cs" />
+    <Compile Include="Infrastructure\ResizedImage\PictureProfile.cs" />
     <Compile Include="Infrastructure\ResizedImage\ImageTransformationHelper.cs" />
     <Compile Include="Infrastructure\ResizedImage\ScaleMode.cs" />
     <Compile Include="Infrastructure\ResizedImage\UrlBuilderExtensions.cs" />
