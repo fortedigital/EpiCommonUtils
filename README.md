@@ -119,3 +119,45 @@ you will get this piece of markup:
 </picture>
 
 ```
+
+#### TransformedXhtmlString and IHtmlTransformation
+
+A `@Html.TransformedXhtmlString` helper method is registered. You can pass `XhtmlString` instance together with two optional class names which will be used as css classes to wrap xmtml and block.
+
+Example:
+
+Let's imagine this piece of TinyMCE (XhtmlString) content:
+
+```
+First paragraph
+Second paragraph
+[Inline block embedded into XhtmlString field]
+Third paragraph
+```
+
+By rendering `@Html.TransformedXhtmlString(XhtmlStringValue, "textWrapperClass", "blockWrappedClass")` you will get this piece of html:
+
+```html
+<div class="textWrapperClass">
+    <p>First paragraph</p>
+    <p>Second paragraph</p>
+</div>
+<section class="blockWrappedClass">
+    <!-- block rendered -->
+</section>
+<div class="textWrapperClass">
+    <p>Third paragraph</p>
+</div>
+```
+
+Additionaly, you can create class which implements `IHtmlTransformation` and register it within `ServiceLocator` as `IHtmlTransformation` implementation. 
+This way you can define additional transformation which will be applied to your `XhtmlString` content.
+
+##### HtmlTransformationAttribute
+
+There's `HtmlTransformationAttribute` defined. It has `Order` field which might be used to manipulate order of transformation applied (lower number means higher precedence).
+Use this attribute to annotate your class implementing `IHtmlTransformation`.
+
+NOTE: you **don't** need `HtmlTransformation` attribute in order transformation to be applied. It's only used for order manipulation purposes. 
+
+
