@@ -65,6 +65,18 @@ namespace Forte.EpiCommonUtils.Infrastructure.ResizedImage
             return GenerateResizedPicture(baseUrl, profile, alternateText, additionalCssClass);
         }
         
+         public static MvcHtmlString ResizedPicture(this HtmlHelper helper, 
+             ResizedPictureViewModel pictureModel, 
+             PictureProfile profile, 
+             string fallbackUrl = null, 
+             string additionalCssClass = null)
+         {
+            var isEmpty = string.IsNullOrWhiteSpace(pictureModel.Url);
+            var baseUrl = isEmpty ? fallbackUrl : pictureModel.Url;
+
+            return GenerateResizedPicture(baseUrl, profile, pictureModel.Alt, additionalCssClass);
+         }
+        
         private static MvcHtmlString GenerateResizedPicture(string imageBaseUrl,
             PictureProfile profile, string alternateText, string additionalCssClass)
         {

@@ -231,6 +231,7 @@
     <Compile Include="Infrastructure\Model\ImageBase.cs" />
     <Compile Include="Infrastructure\ResizedImage\PictureProfile.cs" />
     <Compile Include="Infrastructure\ResizedImage\ImageTransformationHelper.cs" />
+    <Compile Include="Infrastructure\ResizedImage\ResizedPictureViewModel.cs" />
     <Compile Include="Infrastructure\ResizedImage\ScaleMode.cs" />
     <Compile Include="Infrastructure\ResizedImage\UrlBuilderExtensions.cs" />
     <Compile Include="Infrastructure\Webpack.cs" />
