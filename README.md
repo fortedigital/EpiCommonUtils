@@ -150,6 +150,23 @@ By rendering `@Html.TransformedXhtmlString(XhtmlStringValue, "textWrapperClass",
 </div>
 ```
 
+Optionally, you can pass list of types of blocks which should be not wrapped by container. 
+Let's assume  `[Inline block embedded into XhtmlString field]` is an instance of `DummyBlockType`. 
+By doing this:
+`@Html.TransformedXhtmlString(XhtmlStringValue, "textWrapperClass", "blockWrappedClass", new [] {typeof(DummyBlockType)})`
+
+you will get this html rendered:
+```html
+<div class="textWrapperClass">
+    <p>First paragraph</p>
+    <p>Second paragraph</p>
+</div>
+<!-- block rendered -->
+<div class="textWrapperClass">
+    <p>Third paragraph</p>
+</div>
+```
+
 Additionaly, you can create class which implements `IHtmlTransformation` and register it within `ServiceLocator` as `IHtmlTransformation` implementation. 
 This way you can define additional transformation which will be applied to your `XhtmlString` content.
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -15,7 +16,7 @@ namespace Forte.EpiCommonUtils.Infrastructure.HtmlTransformations
      public static class HtmlHelperExtensions
     {
         public static MvcHtmlString TransformedXhtmlString(this HtmlHelper html, XhtmlString xhtmlString,
-            string xhtmlWrapperClass = null, string blocksWrapperClass = null)
+            string xhtmlWrapperClass = null, string blocksWrapperClass = null, IEnumerable<Type> blockTypesToExclude = null)
         {
             if (xhtmlString == null)
             {
@@ -24,14 +25,18 @@ namespace Forte.EpiCommonUtils.Infrastructure.HtmlTransformations
 
             if (xhtmlWrapperClass != null || blocksWrapperClass != null)
             {
-                xhtmlString = WrapContent(xhtmlString, xhtmlWrapperClass, blocksWrapperClass);
+                xhtmlString = WrapContent(xhtmlString, xhtmlWrapperClass, blocksWrapperClass, blockTypesToExclude);
             }
 
             return TransformHtmlString(html.XhtmlString(xhtmlString).ToHtmlString(), html);
         }
         
-        public static XhtmlString WrapContent(XhtmlString xhtmlString, string wrapperClass, string blockWrapperClass)
+        public static XhtmlString WrapContent(XhtmlString xhtmlString, 
+            string wrapperClass, 
+            string blockWrapperClass, 
+            IEnumerable<Type> blockTypesToExclude)
         {
+            blockTypesToExclude = blockTypesToExclude?.ToList() ?? new List<Type>();
             var textWrapperStart = new StaticFragment($"<div class=\"{wrapperClass}\">");
             var textWrapperEnd = new StaticFragment("</div>");
             var blockWrapperStart = blockWrapperClass != null
@@ -54,6 +59,9 @@ namespace Forte.EpiCommonUtils.Infrastructure.HtmlTransformations
                 var isCurrentBlock = currentFragment is ContentFragment;
 
                 if (!isCurrentBlock && string.IsNullOrWhiteSpace(currentFragment.InternalFormat))
+                    continue;
+
+                if (isCurrentBlock && blockTypesToExclude.Any(t => t.IsInstanceOfType(((ContentFragment) currentFragment).GetContent())))
                     continue;
 
                 if (isCurrentBlock)
