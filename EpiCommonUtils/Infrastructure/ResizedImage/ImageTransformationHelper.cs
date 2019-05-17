@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using EPiServer;
@@ -51,8 +52,9 @@ namespace Forte.EpiCommonUtils.Infrastructure.ResizedImage
             this HtmlHelper helper,
             ContentReference image,
             PictureProfile profile,
-            string fallbackUrl = null,
-            string additionalCssClass = null)
+            ResizedPictureViewModel resizedPictureViewModel = null,
+            string fallbackUrl = null
+            )
         {
             var isEmpty = ContentReference.IsNullOrEmpty(image);
             var baseUrl = isEmpty ? fallbackUrl : ResolveImageUrl(image);
@@ -62,36 +64,44 @@ namespace Forte.EpiCommonUtils.Infrastructure.ResizedImage
                     ? content.Description
                     : string.Empty;
 
-            return GenerateResizedPicture(baseUrl, profile, alternateText, additionalCssClass);
+            if (resizedPictureViewModel == null)
+            {
+                resizedPictureViewModel = new ResizedPictureViewModel();
+            }
+                
+            if (!resizedPictureViewModel.ImgElementAttributes.ContainsKey("alt"))
+            {
+                resizedPictureViewModel.ImgElementAttributes.Add("alt", alternateText);
+            }
+
+            return GenerateResizedPicture(baseUrl, profile, resizedPictureViewModel);
         }
         
          public static MvcHtmlString ResizedPicture(this HtmlHelper helper, 
              ResizedPictureViewModel pictureModel, 
              PictureProfile profile, 
-             string fallbackUrl = null, 
-             string additionalCssClass = null)
+             string fallbackUrl = null 
+             )
          {
             var isEmpty = string.IsNullOrWhiteSpace(pictureModel.Url);
             var baseUrl = isEmpty ? fallbackUrl : pictureModel.Url;
 
-            return GenerateResizedPicture(baseUrl, profile, pictureModel.Alt, additionalCssClass);
+            return GenerateResizedPicture(baseUrl, profile, pictureModel);
          }
         
         private static MvcHtmlString GenerateResizedPicture(string imageBaseUrl,
-            PictureProfile profile, string alternateText, string additionalCssClass)
+            PictureProfile profile, ResizedPictureViewModel pictureModel)
         {
             var urlBuilder = BuildResizedImageUrl(imageBaseUrl, profile.DefaultWidth, null, profile);
             var sourceSets = profile.SrcSetWidths.Select(w => FormatSourceSet(imageBaseUrl, w, profile)).ToArray();
 
-            return GeneratePictureElement(profile, urlBuilder.ToString(), sourceSets, alternateText,
-                additionalCssClass);
+            return GeneratePictureElement(profile, urlBuilder.ToString(), sourceSets, pictureModel);
         }
         
         private static MvcHtmlString GeneratePictureElement(PictureProfile profile,
             string imgUrl,
             string[] sourceSets,
-            string alternateText,
-            string additionalCssClass)
+            ResizedPictureViewModel pictureModel)
         {
             var sourceElement = new TagBuilder("source")
             {
@@ -104,28 +114,35 @@ namespace Forte.EpiCommonUtils.Infrastructure.ResizedImage
             var pictureElement = new TagBuilder("picture")
             {
                 InnerHtml = sourceElement.ToString(TagRenderMode.SelfClosing) +
-                            CreateImgElement(imgUrl, alternateText, additionalCssClass)
+                            CreateImgElement(imgUrl, pictureModel.ImgElementAttributes)
                                 .ToString(TagRenderMode.SelfClosing)
             };
+
+            foreach (var kv in pictureModel.PictureElementAttributes)
+            {
+                pictureElement.Attributes.Add(kv.Key, kv.Value);
+            }
 
             return new MvcHtmlString(pictureElement.ToString());
         }
         
-        private static TagBuilder CreateImgElement(string imgUrl, string alternateText, string additionalCssClass)
+        private static TagBuilder CreateImgElement(string imgUrl, IDictionary<string, string> imgAttributes)
         {
-            var tagBuilder = new TagBuilder("img")
+            var imgAttributesConcat = imgAttributes.Concat(new Dictionary<string, string>
             {
-                Attributes =
-                {
-                    {"src", imgUrl},
-                    {"alt", alternateText},
-                    {"data-object-fit", "cover"},
-                    {"data-object-position", "center"}
-                }
-            };
-            if (!string.IsNullOrEmpty(additionalCssClass)) tagBuilder.Attributes.Add("class", additionalCssClass);
+                {"src", imgUrl},
+                {"data-object-fit", "cover"},
+                {"data-object-position", "center"}
+            });
 
-            return tagBuilder;
+            var imgElement = new TagBuilder("img");
+
+            foreach (var kv in imgAttributesConcat)
+            {
+                imgElement.Attributes.Add(kv.Key, kv.Value);
+            }
+
+            return imgElement;
         }
         
         private static string FormatSourceSet(string imageUrl, int width, PictureProfile profile)

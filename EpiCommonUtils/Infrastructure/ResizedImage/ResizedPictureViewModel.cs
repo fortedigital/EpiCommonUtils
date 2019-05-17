@@ -1,14 +1,18 @@
+using System.Collections.Generic;
+
 namespace Forte.EpiCommonUtils.Infrastructure.ResizedImage
 {
     public class ResizedPictureViewModel
     {
-            public ResizedPictureViewModel(string url, string alt)
+            public ResizedPictureViewModel()
             {
-                this.Url = url;
-                this.Alt = alt;
+                this.ImgElementAttributes = new Dictionary<string, string>();
+                this.PictureElementAttributes = new Dictionary<string, string>();
             }
         
-            public string Url { get; }
-            public string Alt { get; }
+            public string Url { get; set; }
+            
+            public IDictionary<string, string> ImgElementAttributes { get; }
+            public IDictionary<string, string> PictureElementAttributes { get; }
         }
     }
