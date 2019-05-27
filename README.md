@@ -125,7 +125,7 @@ you will get this piece of markup:
 There is also similar way to create responsive, screen size based backgrounds. As background is defined by CSS, there is `ResizeBackground` HTML helper method available:
 ```razor 
 @{
-    var backgroundClass = @Html.ResizeBackground(Model, BackgroundPictureProfiles.Anything);
+    var backgroundClass = @Html.ResizeBackground(Model, PictureProfiles.DefaultBackground);
 }
 
 <div class="@backgroundClass"></div>
@@ -135,7 +135,7 @@ Method will render piece of CSS code with proper media queries and returns name 
 ```cs
 public static class PictureProfiles
 {
-    public static readonly PictureProfile Anything = new BackgroundPictureProfile
+    public static readonly BackgroundPictureProfile DefaultBackground = new BackgroundPictureProfile
     {
         AllowedSizes = new[]
         {
