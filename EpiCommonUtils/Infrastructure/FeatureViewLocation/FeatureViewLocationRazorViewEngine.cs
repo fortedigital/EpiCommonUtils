@@ -11,6 +11,7 @@ using JetBrains.Annotations;
 [assembly: AspMvcPartialViewLocationFormat("~/Features/{1}/{0}.cshtml")]
 [assembly: AspMvcPartialViewLocationFormat("~/Features/Blocks/{1}/{0}.cshtml")]
 [assembly: AspMvcPartialViewLocationFormat("~/Features/Blocks/{0}/Index.cshtml")]
+[assembly: AspMvcPartialViewLocationFormat("~/Features/Blocks/{0}/{0}.cshtml")]
 [assembly: AspMvcPartialViewLocationFormat("~/Features/Partials/{0}.cshtml")]
 [assembly: AspMvcPartialViewLocationFormat("~/Features/Partials/{0}/{0}.cshtml")]
 [assembly: AspMvcPartialViewLocationFormat("~/Features/Partials/{1}/{0}.cshtml")]
@@ -38,6 +39,7 @@ namespace Forte.EpiCommonUtils.Infrastructure.FeatureViewLocation
                 "~/Features/{0}.cshtml", // {0} -> DisplayTemplates\Image
                 "~/Features/{1}/{0}.cshtml", // {1} -> 
                 "~/Features/Blocks/{1}/{0}.cshtml",
+                "~/Features/Blocks/{0}/{0}.cshtml",
                 "~/Features/Blocks/{0}/Index.cshtml",
                 "~/Features/Partials/{0}.cshtml",
                 "~/Features/Partials/{0}/{0}.cshtml",
