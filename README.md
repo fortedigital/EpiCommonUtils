@@ -206,4 +206,6 @@ Use this attribute to annotate your class implementing `IHtmlTransformation`.
 
 NOTE: you **don't** need `HtmlTransformation` attribute in order transformation to be applied. It's only used for order manipulation purposes. 
 
+### MaxItemsAllowedAttribute
 
+This attribute can be placed on property/field of type `ContentArea`, `LinkItemCollection` or any `IEnumerable` to limit the maximum number of items linked in them
