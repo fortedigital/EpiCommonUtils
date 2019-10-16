@@ -149,6 +149,10 @@ public static class PictureProfiles
 
 ```
 
+### TranslationFileGenerator
+
+`TranslationFileGenerator` generates strongly typed class out of .xml language files. Invoke static `Generate` method in `TranslationGenerationInitializer` for easy use, passing source and target directory as arguments or run `Generate` method directly on generator providing source directory, root namespace and class name.
+
 ### TransformedXhtmlString and IHtmlTransformation
 
 A `@Html.TransformedXhtmlString` helper method is registered. You can pass `XhtmlString` instance together with two optional class names which will be used as css classes to wrap xmtml and block.
