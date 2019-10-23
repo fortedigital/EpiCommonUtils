@@ -7,7 +7,6 @@ using EPiServer.SpecializedProperties;
 
 namespace Forte.EpiCommonUtils.Infrastructure.Validation
 {
-    
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter)]
     public class MaxItemsAllowedAttribute: ValidationAttribute
     {
