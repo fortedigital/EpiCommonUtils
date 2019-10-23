@@ -7,6 +7,18 @@ This is a set of common stuff which might be helpfull with your day to day EpiSe
 It's available as a [nuget package](https://www.nuget.org/packages/Forte.EpiCommonUtils/)
  
 ## Key features
+
+### Validation attributes
+There are couple of additional validation attributes for Episerver model classes available:
+
+#### MaxItemsAllowedAttribute
+
+This attribute can be placed on property/field of type `ContentArea`, `LinkItemCollection` or any `IEnumerable` to limit the maximum number of items linked in them
+
+#### XHtmlStringAllowedTypesAttribute
+
+Can be placed on property/field of `XHtmlString` type. It limits types of content that can be placed in the content (via TinyMCE), similar to Episerver-builtin `AllowedTypesAttribute`. Keep in mind that it works for both block and media types.
+
 ### HostingEnvironment
 
 Offers several flags saying on which environment solution is working on. It's based on `episerver:EnvironmentName` appSetting:
@@ -209,7 +221,3 @@ There's `HtmlTransformationAttribute` defined. It has `Order` field which might 
 Use this attribute to annotate your class implementing `IHtmlTransformation`.
 
 NOTE: you **don't** need `HtmlTransformation` attribute in order transformation to be applied. It's only used for order manipulation purposes. 
-
-### MaxItemsAllowedAttribute
-
-This attribute can be placed on property/field of type `ContentArea`, `LinkItemCollection` or any `IEnumerable` to limit the maximum number of items linked in them
