@@ -229,14 +229,6 @@
     <Compile Include="Infrastructure\HtmlTransformations\HtmlTransformationAttribute.cs" />
     <Compile Include="Infrastructure\HtmlTransformations\IHtmlTransformation.cs" />
     <Compile Include="Infrastructure\Model\ImageBase.cs" />
-    <Compile Include="Infrastructure\ResizedImage\Background\BackgroundPictureProfile.cs" />
-    <Compile Include="Infrastructure\ResizedImage\Background\PictureSize.cs" />
-    <Compile Include="Infrastructure\ResizedImage\Background\ResizeBackgroundHelper.cs" />
-    <Compile Include="Infrastructure\ResizedImage\PictureProfile.cs" />
-    <Compile Include="Infrastructure\ResizedImage\ImageTransformationHelper.cs" />
-    <Compile Include="Infrastructure\ResizedImage\ResizedPictureViewModel.cs" />
-    <Compile Include="Infrastructure\ResizedImage\ScaleMode.cs" />
-    <Compile Include="Infrastructure\ResizedImage\UrlBuilderExtensions.cs" />
     <Compile Include="Infrastructure\Translation\TranslationFileGenerator.cs" />
     <Compile Include="Infrastructure\Translation\TranslationGenerationInitializer.cs" />
     <Compile Include="Infrastructure\Validation\MaxItemsAllowedAttribute.cs" />
