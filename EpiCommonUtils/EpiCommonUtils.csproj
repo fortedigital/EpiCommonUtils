@@ -222,6 +222,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Infrastructure\DependencyInjection\StructureMapDependencyInjectionRegistrationModule.cs" />
+    <Compile Include="Infrastructure\EntryValueConverter.cs" />
     <Compile Include="Infrastructure\FeatureViewLocation\FeatureViewLocationRazorViewEngine.cs" />
     <Compile Include="Infrastructure\FeatureViewLocation\FeatureViewLocationRazorViewEngineInitializationModule.cs" />
     <Compile Include="Infrastructure\HostingEnvironment.cs" />

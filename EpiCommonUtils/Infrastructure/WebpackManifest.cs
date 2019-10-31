@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
+using System.Linq;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -66,10 +68,37 @@ namespace Forte.EpiCommonUtils.Infrastructure
             return value;
         }
 
-        public class Entry
+        public class Entry : Dictionary<string, EntryValue>
         {
-            public string Css { get; set; }
-            public string Js { get; set; }
+            public Entry() : base(StringComparer.InvariantCultureIgnoreCase)
+            {
+            }
+
+            public string Css => this.GetSingleValue("css");
+
+            public string Js => this.GetSingleValue("js");
+
+            private string GetSingleValue(string key)
+            {
+                if (this.TryGetValue(key, out var value) == false)
+                {
+                    return null;
+                }
+
+                return value.FirstOrDefault();
+            }
+        }
+
+        [JsonConverter(typeof(EntryValueConverter))]
+        public class EntryValue : List<string>
+        {
+            public EntryValue()
+            {
+            }
+
+            public EntryValue([NotNull] IEnumerable<string> collection) : base(collection)
+            {
+            }
         }
     }
 }
