@@ -189,6 +189,7 @@ namespace Forte.EpiCommonUtils.Infrastructure.Translation
         private void RenderResources(IEnumerable<Resource> resourceList, string rootNamespace)
         {
             this.WriteLine("using EPiServer.Framework.Localization;");
+            this.WriteLine("using System.Globalization;");
             this.WriteLine($"namespace {rootNamespace}");
             this.WriteLine("{");
             this.RenderClasses(resourceList, String.Empty, 0);
@@ -273,6 +274,8 @@ namespace Forte.EpiCommonUtils.Infrastructure.Translation
             }
             this.WriteLineIndent(level,
                 $"public static string @{FirstLetterToUpperCase(propertyName)}{{ get {{ return LocalizationService.Current.GetString(\"{values.First().Key}\"); }} }}"); // taking a value of the first key, since all keys should be the same for all languages
+            this.WriteLineIndent(level,
+                $"public static string @Get{FirstLetterToUpperCase(propertyName)}(CultureInfo cultureInfo){{ return LocalizationService.Current.GetStringByCulture(\"{values.First().Key}\", cultureInfo); }}");
         }
 
         /// <summary>
