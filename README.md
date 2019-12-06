@@ -11,13 +11,49 @@ It's available as a [nuget package](https://www.nuget.org/packages/Forte.EpiComm
 ### Validation attributes
 There are couple of additional validation attributes for Episerver model classes available:
 
-#### MaxItemsAllowedAttribute
+#### MaxItemsAllowed
 
 This attribute can be placed on property/field of type `ContentArea`, `LinkItemCollection` or any `IEnumerable` to limit the maximum number of items linked in them
 
-#### XHtmlStringAllowedTypesAttribute
+#### AllowedItemsCount
+This attribute, placed on property/field of type `ContentArea`, `LinkItemCollection` or any `IEnumerable`, will constraint amount of items to given range (inclusive).
+
+#### XHtmlStringAllowedTypes
 
 Can be placed on property/field of `XHtmlString` type. It limits types of content that can be placed in the content (via TinyMCE), similar to Episerver-builtin `AllowedTypesAttribute`. Keep in mind that it works for both block and media types.
+
+### Editor descriptors
+
+Additional defined editor descriptors:
+
+#### EnumEditorDescriptor
+Allow to use enums in Episerver models, selectable by editors. Usage:
+
+```cs
+public enum EnumType {
+    Value1 = 1,
+    Value2 = 2,
+    [EpiUnselectable] IgnoredValue = 3 // add explicit values to make it less fragile for refactoring
+}
+
+public class SomePage: PageData {
+    [BackingType(typeof(PropertyNumber))]
+    [EditorDescriptor(EditorDescriptorType = typeof(EnumEditorDescriptor<EnumType>))]
+}
+```
+In order to translate enum values for editor, define following in language XML files:
+```xml
+<languages>
+    <language>
+        <enum>
+            <EnumType>
+                <Value1>Value 1</Value1>
+                <Value2>Value 1</Value2>
+                <IgnoredValue>This value is irrelevant, as won't be shown to editors</IgnoredValue>
+    </language>
+</languages>
+```
+
 
 ### HostingEnvironment
 
@@ -71,95 +107,7 @@ If you wish to disable this registration you can do it by setting flags in `appS
 ``` 
 
 ### Image html helpers
-
-There are two html helpers method registered. Both of them make use of `PictureProfile` class which is also a part of this package:
-
-```c#
-public class PictureProfile
-{
-    public int DefaultWidth { get; set; }
-    public int[] SrcSetWidths { get; set; }
-    public string[] SrcSetSizes { get; set; }
-    public int? MaxHeight { get; set; }
-    public ScaleMode Mode { get; set; }
-    public int? Quality { get; set; }
-}
-```
-
-#### ResizedImageUrl
-
-This will generate url to resized image. Example usage (`Model` is supposed to be `ContentReference` instance):
-```razor
-<img src="@Html.ResizedImageUrl(Model, 2048, 1000, new PictureProfile{Mode = ScaleMode.Crop})" />
-```
-
-#### ResizedPicture
-
-_NOTE: In order this method to load `alt` element properly Image property should be of type `Forte.EpiCommonUtils.Infrastructure.Model.ImageBase`_
-
-This will generate `picture` element with responsive support. So, having defined this (there's no predefined profiles in this package) :
-
-```c#
-public static class PictureProfiles
-{
-    public static readonly PictureProfile Hero = new PictureProfile
-    {
-        DefaultWidth = 1500,
-        SrcSetWidths = new[] { 400, 800, 1200, 1600 },
-        SrcSetSizes = new[]
-        {
-            "(min-width: 1200px) 1400px",
-            "(min-width: 1140px) 1140px",
-            "(max-width: 1139px) 100vw",
-        },           
-        Mode = ScaleMode.Crop,
-        Quality = 60
-    };
-}
-``` 
-
-by doing this:
-
-```razor
-@Html.ResizedPicture(Model, PictureProfiles.Hero)
-```
-
-you will get this piece of markup:
-```html
-<picture>
-    <source sizes="(min-width: 1200px) 1400px, (min-width: 1140px) 1140px, (max-width: 1139px) 100vw" srcset="/contentassets/92a71a8e82a94be3ab5581d099a68f48/1.jpg?w=400&mode=crop&quality=60 400w, /contentassets/92a71a8e82a94be3ab5581d099a68f48/1.jpg?w=800&mode=crop&quality=60 800w, /contentassets/92a71a8e82a94be3ab5581d099a68f48/1.jpg?w=1200&mode=crop&quality=60 1200w, /contentassets/92a71a8e82a94be3ab5581d099a68f48/1.jpg?w=1600&mode=crop&quality=60 1600w" />
-    <img alt="alternate custom" data-object-fit="cover" data-object-position="center" src="/contentassets/92a71a8e82a94be3ab5581d099a68f48/1.jpg?w=1500&mode=crop&quality=60" />
-</picture>
-
-```
-
-#### Responsive background
-There is also similar way to create responsive, screen size based backgrounds. As background is defined by CSS, there is `ResizeBackground` HTML helper method available:
-```razor 
-@{
-    var backgroundClass = @Html.ResizeBackground(Model, PictureProfiles.DefaultBackground);
-}
-
-<div class="@backgroundClass"></div>
-```
-
-Method will render piece of CSS code with proper media queries and returns name of CSS class that should be applied to the element in order to add background to it. It accepts slightly different, background picture profile: 
-```cs
-public static class PictureProfiles
-{
-    public static readonly BackgroundPictureProfile DefaultBackground = new BackgroundPictureProfile
-    {
-        AllowedSizes = new[]
-        {
-            new PictureSize("min-width: 1200px", 1400),
-            new PictureSize("min-width: 800px", 1200),
-            new PictureSize("min-width: 600px", 800),
-            new PictureSize("max-width: 599px", 600),
-        },
-    };
-}
-
-```
+With versions 2.0+, image HTML helpers for responsive pictures and backgrounds were moved to separate NuGet package: [Forte.EpiResponsivePicture](https://github.com/fortedigital/EpiResponsivePicture).
 
 ### TranslationFileGenerator
 
