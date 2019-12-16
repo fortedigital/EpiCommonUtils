@@ -39,6 +39,7 @@ public enum EnumType {
 public class SomePage: PageData {
     [BackingType(typeof(PropertyNumber))]
     [EditorDescriptor(EditorDescriptorType = typeof(EnumEditorDescriptor<EnumType>))]
+    public virtual EnumType SomeEnum { get; set; }
 }
 ```
 In order to translate enum values for editor, define following in language XML files:
@@ -50,6 +51,8 @@ In order to translate enum values for editor, define following in language XML f
                 <Value1>Value 1</Value1>
                 <Value2>Value 1</Value2>
                 <IgnoredValue>This value is irrelevant, as won't be shown to editors</IgnoredValue>
+            </EnumType>
+         </enum>
     </language>
 </languages>
 ```
