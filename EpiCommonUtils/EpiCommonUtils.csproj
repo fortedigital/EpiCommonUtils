@@ -248,7 +248,6 @@
     <Compile Include="Infrastructure\HtmlTransformations\HtmlHelperExtensions.cs" />
     <Compile Include="Infrastructure\HtmlTransformations\HtmlTransformationAttribute.cs" />
     <Compile Include="Infrastructure\HtmlTransformations\IHtmlTransformation.cs" />
-    <Compile Include="Infrastructure\Model\ImageBase.cs" />
     <Compile Include="Infrastructure\Translation\TranslationFileGenerator.cs" />
     <Compile Include="Infrastructure\Translation\TranslationGenerationInitializer.cs" />
     <Compile Include="Infrastructure\Validation\AllowedItemsCount.cs" />
