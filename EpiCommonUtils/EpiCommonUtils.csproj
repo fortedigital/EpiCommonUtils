@@ -256,6 +256,7 @@
     <Compile Include="Infrastructure\Validation\XHtmlStringAllowedTypesAttribute.cs" />
     <Compile Include="Infrastructure\Webpack.cs" />
     <Compile Include="Infrastructure\WebpackManifest.cs" />
+    <Compile Include="Jobs\DeleteMissingPropertiesJob.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
