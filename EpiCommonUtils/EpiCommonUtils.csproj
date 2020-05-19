@@ -251,7 +251,9 @@
     <Compile Include="Infrastructure\Translation\TranslationFileGenerator.cs" />
     <Compile Include="Infrastructure\Translation\TranslationGenerationInitializer.cs" />
     <Compile Include="Infrastructure\Validation\AllowedItemsCount.cs" />
+    <Compile Include="Infrastructure\Validation\ContentWithSameTemplateAttribute.cs" />
     <Compile Include="Infrastructure\Validation\MaxItemsAllowedAttribute.cs" />
+    <Compile Include="Infrastructure\Validation\XHtmlStringAllowedBlockTypes.cs" />
     <Compile Include="Infrastructure\Validation\XHtmlStringAllowedTypesAttribute.cs" />
     <Compile Include="Infrastructure\Webpack.cs" />
     <Compile Include="Infrastructure\WebpackManifest.cs" />
