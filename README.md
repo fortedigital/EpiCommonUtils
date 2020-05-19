@@ -24,7 +24,11 @@ Can be placed on property/field of `XHtmlString` type. It limits types of conten
 
 #### XhtmlStringAllowedBlockTypes
 
-Same as `XhtmlStringAllowedTypes`, but restricts only block types, not media.
+Same as `[XhtmlStringAllowedTypes]`, but restricts only block types, not media.
+
+#### ContentWithSameTemplate
+
+Validates if content placed in Content Area uses the same template for rendering. Useful when modeling list blocks.
 
 ### Editor descriptors
 
