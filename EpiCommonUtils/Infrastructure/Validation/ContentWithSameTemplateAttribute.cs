@@ -19,13 +19,19 @@ namespace Forte.EpiCommonUtils.Infrastructure.Validation
                 return ValidationResult.Success;
             
             var contentArea = (ContentArea) value;
+            var templates = contentArea.Items.Select(GetTemplate)
+                .Where(x => x != null)
+                .Distinct()
+                .ToList();
+                
+            var templateTypes = templates.Select(x => x.TemplateType);
 
-            var isValid = contentArea.Items.Select(this.GetTemplate).Where(x => x != null).Select(x => x.TemplateType)
-                .Distinct().Count() <= 1;
+            var isValid = templateTypes.Count() <= 1;
 
             return isValid
                 ? ValidationResult.Success
-                : new ValidationResult("Content on the list must be of the same type");
+                : new ValidationResult(
+                    $"Content on the list must be of the same type, but has: {string.Join(", ", templates.Select(x => x.ModelType.Name))}");
         }
 
         private TemplateModel GetTemplate(ContentAreaItem contentAreaItem)

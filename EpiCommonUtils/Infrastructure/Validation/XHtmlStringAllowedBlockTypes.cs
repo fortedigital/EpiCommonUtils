@@ -11,13 +11,14 @@ namespace Forte.EpiCommonUtils.Infrastructure.Validation
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
     public class XHtmlStringAllowedBlockTypes : ValidationAttribute
     {
-        private readonly IContentLoader contentLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
+#pragma warning disable 649
+        private readonly Injected<IContentLoader> _contentLoader;
+#pragma warning restore 649
+        private readonly Type[] _allowedTypes;
         
-        private readonly Type[] allowedTypes;
-        
-        public XHtmlStringAllowedBlockTypes(Type[] allowedTypes)
+        public XHtmlStringAllowedBlockTypes(params Type[] allowedTypes)
         {
-            this.allowedTypes = allowedTypes;
+            _allowedTypes = allowedTypes;
         }
  
         protected override ValidationResult IsValid(object value, ValidationContext context)
@@ -29,9 +30,9 @@ namespace Forte.EpiCommonUtils.Infrastructure.Validation
                 foreach (var stringFragment in richTextProperty.Fragments.Where(x => x is ContentFragment))
                 {
                     var fragment = (ContentFragment) stringFragment;
-                    var content = this.contentLoader.Get<IContentData>(fragment.ContentLink);
+                    var content = _contentLoader.Service.Get<IContentData>(fragment.ContentLink);
  
-                    foreach (var allowedType in this.allowedTypes)
+                    foreach (var allowedType in _allowedTypes)
                     {
                         if (allowedType.IsInstanceOfType(content) == false)
                         {
