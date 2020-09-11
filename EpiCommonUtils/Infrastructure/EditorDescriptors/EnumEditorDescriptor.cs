@@ -12,7 +12,7 @@ namespace Forte.EpiCommonUtils.Infrastructure.EditorDescriptors
     {
     }
 
-    public class NullableEditorDescriptor<TEnum> : EnumEditorDescriptor<TEnum, NullableEnumSelectionFactory<TEnum>> where TEnum : struct, IConvertible
+    public class NullableEnumEditorDescriptor<TEnum> : EnumEditorDescriptor<TEnum, NullableEnumSelectionFactory<TEnum>> where TEnum : struct, IConvertible
     {
     }
 
