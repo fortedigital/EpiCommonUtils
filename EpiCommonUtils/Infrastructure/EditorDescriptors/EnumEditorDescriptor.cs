@@ -12,6 +12,10 @@ namespace Forte.EpiCommonUtils.Infrastructure.EditorDescriptors
     {
     }
 
+    public class NullableEditorDescriptor<TEnum> : EnumEditorDescriptor<TEnum, NullableEnumSelectionFactory<TEnum>> where TEnum : struct, IConvertible
+    {
+    }
+
     public class EnumEditorDescriptor<TEnum, TSelectionFactory> : EditorDescriptor where TEnum : struct, IConvertible
     {
         public override void ModifyMetadata(
