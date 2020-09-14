@@ -39,6 +39,7 @@ Allow to use enums in Episerver models, selectable by editors. Usage:
 
 ```cs
 public enum EnumType {
+    [Display(Name = "Custom text")] // set value displayed to editor manually (if you don't want to use translations)
     Value1 = 1,
     Value2 = 2,
     [EpiUnselectable] IgnoredValue = 3 // add explicit values to make it less fragile for refactoring
@@ -65,6 +66,9 @@ In order to translate enum values for editor, define following in language XML f
 </languages>
 ```
 
+#### NullableEnumEditorDescriptor
+
+This is variation of `EnumEditorDescriptor` with one difference: by using `NullableEnumEditorDescriptor` you will get extra "empty" choice in the dropdown which will set null value to your property
 
 ### HostingEnvironment
 

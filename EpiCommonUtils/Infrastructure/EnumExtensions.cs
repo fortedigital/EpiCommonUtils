@@ -20,7 +20,12 @@ namespace Forte.EpiCommonUtils.Infrastructure
             var staticName = Enum.GetName(typeof(TEnum), value);
             
             var localizationPath = $"/enum/{typeof(TEnum).Name}/{staticName}";
-            return localizationService.GetString(localizationPath, staticName);
+            if (localizationService.TryGetString(localizationPath, out var localizedString))
+            {
+                return localizedString;
+            }
+
+            return string.Empty;
         }
     }
 }
