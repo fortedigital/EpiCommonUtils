@@ -66,6 +66,18 @@ In order to translate enum values for editor, define following in language XML f
 </languages>
 ```
 
+#### UseUnderlyingTypeAttribute
+
+This attribute can be used on enum properties which are using `EnumEditorDescriptor` or `EnumSelectionFactory` in order to change how `SelectItem` is sent to Episerver UI.
+
+By default, enum values are serialized to json using a configured converter. In some cases, this might be undesirable and by adding `UseUnderlyingType` one can override this behavior.
+
+```cs
+    [EditorDescriptor(EditorDescriptorType = typeof(EnumEditorDescriptor<EnumType>))]
+    [UseUnderlyingType]
+    public virtual EnumType SomeEnum { get; set; }
+```
+
 #### NullableEnumEditorDescriptor
 
 This is variation of `EnumEditorDescriptor` with one difference: by using `NullableEnumEditorDescriptor` you will get extra "empty" choice in the dropdown which will set null value to your property
