@@ -240,6 +240,7 @@
     <Compile Include="Infrastructure\EditorDescriptors\EpiUnselectableAttribute.cs" />
     <Compile Include="Infrastructure\EditorDescriptors\NullableEnumEditorDescriptor.cs" />
     <Compile Include="Infrastructure\EditorDescriptors\NullableEnumSelectionFactory.cs" />
+    <Compile Include="Infrastructure\EditorDescriptors\UseUnderlyingTypeAttribute.cs" />
     <Compile Include="Infrastructure\EntryValueConverter.cs" />
     <Compile Include="Infrastructure\EnumExtensions.cs" />
     <Compile Include="Infrastructure\FeatureViewLocation\FeatureViewLocationRazorViewEngine.cs" />

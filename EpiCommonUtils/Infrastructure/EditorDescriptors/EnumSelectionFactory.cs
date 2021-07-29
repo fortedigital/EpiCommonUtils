@@ -12,6 +12,8 @@ namespace Forte.EpiCommonUtils.Infrastructure.EditorDescriptors
         public virtual IEnumerable<ISelectItem> GetSelections(ExtendedMetadata metadata)
         {
             var values = Enum.GetValues(typeof(TEnum));
+            var useUnderlyingType = metadata.Attributes.Any(attribute => attribute is UseUnderlyingTypeAttribute);
+
             foreach (var value in values)
             {
                 var enumType = typeof(TEnum);
@@ -21,10 +23,17 @@ namespace Forte.EpiCommonUtils.Infrastructure.EditorDescriptors
                     yield return new SelectItem
                     {
                         Text = GetEnumText((TEnum) value),
-                        Value = value
+                        Value = GetValue((TEnum) value, useUnderlyingType),
                     };
                 }
             }
+        }
+
+        private static object GetValue(TEnum enumValue, bool useUnderlyingType)
+        {
+            return useUnderlyingType
+                ? Convert.ChangeType(enumValue, Enum.GetUnderlyingType(typeof(TEnum)))
+                : enumValue;
         }
 
         private static string GetEnumText(TEnum value)
