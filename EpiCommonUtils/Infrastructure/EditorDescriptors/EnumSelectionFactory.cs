@@ -21,7 +21,7 @@ namespace Forte.EpiCommonUtils.Infrastructure.EditorDescriptors
                     yield return new SelectItem
                     {
                         Text = GetEnumText((TEnum) value),
-                        Value = value
+                        Value = Convert.ChangeType(value, Enum.GetUnderlyingType(typeof(TEnum)))
                     };
                 }
             }
