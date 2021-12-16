@@ -48,7 +48,7 @@ namespace Forte.EpiCommonUtils.Infrastructure.HtmlTransformations
             
             xhtmlString = xhtmlString.CreateWritableClone();
 
-            var isNextBlock = xhtmlString.Fragments.Last() is ContentFragment;
+            var isNextBlock = xhtmlString.Fragments.LastOrDefault() is ContentFragment;
             xhtmlString.Fragments.Add(isNextBlock
                 ? blockWrapperEnd
                 : textWrapperEnd);
