@@ -17,13 +17,13 @@ namespace Forte.EpiCommonUtils.Infrastructure.Validation
         {
             if (value == null)
                 return ValidationResult.Success;
-            
+
             var contentArea = (ContentArea) value;
             var templates = contentArea.Items.Select(GetTemplate)
                 .Where(x => x != null)
                 .Distinct()
                 .ToList();
-                
+
             var templateTypes = templates.Select(x => x.TemplateType);
 
             var isValid = templateTypes.Count() <= 1;
@@ -40,7 +40,7 @@ namespace Forte.EpiCommonUtils.Infrastructure.Validation
                 ? _templateResolver.Service.Resolve(content, TemplateTypeCategories.MvcPartial, "")
                 : null;
         }
-        
+
 #pragma warning disable 649
         private Injected<ITemplateResolver> _templateResolver;
         private Injected<IContentLoader> _contentLoader;
