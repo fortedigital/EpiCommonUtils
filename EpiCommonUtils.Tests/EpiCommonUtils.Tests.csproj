@@ -1,6 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Library</OutputType>
+    <RootNamespace>Forte.EpiCommonUtils.Tests</RootNamespace>
+    <AssemblyName>Forte.EpiCommonUtils.Tests</AssemblyName>
   </PropertyGroup>
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
