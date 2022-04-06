@@ -1,9 +1,8 @@
 ﻿using System;
-using Forte.EpiCommonUtils;
 using Forte.EpiCommonUtils.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
 
-// ReSharper disable once CheckNamespace
-namespace Microsoft.Extensions.DependencyInjection
+namespace Forte.EpiCommonUtils
 {
     public static class ServiceCollectionExtensions
     {
