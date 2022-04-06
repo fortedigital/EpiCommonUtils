@@ -1,43 +1,41 @@
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
 using System.Linq;
+using EPiServer.Web;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
 namespace Forte.EpiCommonUtils.Infrastructure
 {
-    public static class WebpackManifest
+    public class WebpackManifest
     {
-
-        private static string _manifestPath;
-
-        public static string ManifestPath
+        private readonly EpiCommonUtilsOptions _options;
+        private readonly IWebHostingEnvironment _webHostingEnvironment;
+        private readonly Lazy<IReadOnlyDictionary<string, Entry>> _instance;
+        public WebpackManifest(EpiCommonUtilsOptions options, IWebHostingEnvironment webHostingEnvironment)
         {
-            get
-            {
-                if (_manifestPath != null)
-                {
-                    return _manifestPath;
-                }
-
-                _manifestPath = ConfigurationManager.AppSettings["webpack:manifestPath"];
-
-                return _manifestPath ?? "/dist/webpack-assets.json";
-            }
-            
-            set => _manifestPath = value;
+            _options = options;
+            _webHostingEnvironment = webHostingEnvironment;
+            _instance = new Lazy<IReadOnlyDictionary<string, Entry>>(Load);
         }
 
-        private static readonly Lazy<IReadOnlyDictionary<string, Entry>> instance = new Lazy<IReadOnlyDictionary<string, Entry>>(Load);
+        public string ManifestPath => _options.WebpackManifestPath;
 
-        public static IReadOnlyDictionary<string, Entry> Instance => instance.Value;
-
-        private static IReadOnlyDictionary<string, Entry> Load()
+        public Entry GetEntry(string key)
         {
-            var manifestAbsolutePath = System.Web.Hosting.HostingEnvironment.MapPath(ManifestPath);
+            if (_instance.Value.TryGetValue(key, out var value) == false)
+            {
+                throw new InvalidOperationException($"Key {key} not found in manifest file.");
+            }
+
+            return value;
+        }
+
+        private IReadOnlyDictionary<string, Entry> Load()
+        {
+            var manifestAbsolutePath = Path.Join(_webHostingEnvironment.WebRootPath, ManifestPath);
 
             if (string.IsNullOrEmpty(manifestAbsolutePath))
             {
@@ -52,20 +50,10 @@ namespace Forte.EpiCommonUtils.Infrastructure
 
             var serializerSettings = new JsonSerializerSettings
             {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
             };
 
             return JsonConvert.DeserializeObject<Dictionary<string, Entry>>(File.ReadAllText(manifestAbsolutePath), serializerSettings);
-        }
-        
-        public static Entry GetEntry(string key)
-        {
-            if (instance.Value.TryGetValue(key, out var value) == false)
-            {
-                throw new InvalidOperationException($"Key {key} not found in manifest file.");
-            }
-
-            return value;
         }
 
         public class Entry : Dictionary<string, EntryValue>
@@ -77,6 +65,8 @@ namespace Forte.EpiCommonUtils.Infrastructure
             public string Css => this.GetSingleValue("css");
 
             public string Js => this.GetSingleValue("js");
+
+            public string Svg => GetSingleValue("svg");
 
             private string GetSingleValue(string key)
             {

@@ -1,54 +1,43 @@
-using System;
-using System.Configuration;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 
 namespace Forte.EpiCommonUtils.Infrastructure
 {
     public class Webpack
     {
-        private static string _webpackDevServerUrl;
+        private readonly WebpackManifest _webpackManifest;
+        private readonly EpiCommonUtilsOptions _epiCommonUtilsOptions;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public static string WebpackDevServerUrl
+        public Webpack(WebpackManifest webpackManifest, EpiCommonUtilsOptions epiCommonUtilsOptions, IWebHostEnvironment webHostEnvironment)
         {
-            get
-            {
-                if (_webpackDevServerUrl != null)
-                {
-                    return _webpackDevServerUrl;
-                }
-
-                _webpackDevServerUrl = ConfigurationManager.AppSettings["webpack:devServerUrl"];
-
-                return _webpackDevServerUrl ?? "http://localhost:8080/dist/";
-            }
-            
-            set => _webpackDevServerUrl = value;
+            _webpackManifest = webpackManifest;
+            _epiCommonUtilsOptions = epiCommonUtilsOptions;
+            _webHostEnvironment = webHostEnvironment;
         }
-        public static string GetStylesheetUrl(string name)
+
+        public string WebpackDevServerUrl => _epiCommonUtilsOptions.WebpackDevServerUrl;
+
+        public string GetStylesheetUrl(string name)
         {
-            if (HostingEnvironment.IsLocalDev)
+            if (_webHostEnvironment.IsDevelopment())
             {
                 return WebpackDevServerUrl + name + ".css";
             }
 
-            if (WebpackManifest.Instance.TryGetValue(name, out var entry) == false)
-            {
-                throw new InvalidOperationException($"WebpackManifestEntry does not exist for '{name}'");
-            }
+            var entry = _webpackManifest.GetEntry(name);
 
             return entry.Css;
         }
 
-        public static string GetScriptUrl(string name)
+        public string GetScriptUrl(string name)
         {
-            if (HostingEnvironment.IsLocalDev)
+            if (_webHostEnvironment.IsDevelopment())
             {
                 return WebpackDevServerUrl + name + ".js";
             }
 
-            if (WebpackManifest.Instance.TryGetValue(name, out var entry) == false)
-            {
-                throw new InvalidOperationException($"WebpackManifestEntry does not exist for '{name}'");
-            }
+            var entry = _webpackManifest.GetEntry(name);
 
             return entry.Js;
         }
