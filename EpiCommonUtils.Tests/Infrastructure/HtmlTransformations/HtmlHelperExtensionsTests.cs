@@ -12,7 +12,7 @@ using Forte.EpiCommonUtils.Infrastructure.HtmlTransformations;
 using Moq;
 using NUnit.Framework;
 
-namespace EpiCommonUtils.Tests.Infrastructure.HtmlTransformations
+namespace Forte.EpiCommonUtils.Tests.Infrastructure.HtmlTransformations
 {
     [TestFixture]
     public class XHtmlWrappingTests
