@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text.Encodings.Web;
 using AngleSharp;
 using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
@@ -8,15 +10,17 @@ using Castle.Core.Internal;
 using EPiServer.Core;
 using EPiServer.Core.Html.StringParsing;
 using EPiServer.ServiceLocation;
+using EPiServer.Web.Mvc.Html;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Forte.EpiCommonUtils.Infrastructure.HtmlTransformations
 {
-     public static class HtmlHelperExtensions
+    public static class HtmlHelperExtensions
     {
         public static HtmlString TransformedXhtmlString(this IHtmlHelper html, XhtmlString xhtmlString,
-            string xhtmlWrapperClass = null, string blocksWrapperClass = null, IEnumerable<Type> blockTypesToExclude = null)
+            string xhtmlWrapperClass = null, string blocksWrapperClass = null,
+            IEnumerable<Type> blockTypesToExclude = null)
         {
             if (xhtmlString == null)
             {
@@ -28,7 +32,7 @@ namespace Forte.EpiCommonUtils.Infrastructure.HtmlTransformations
                 xhtmlString = WrapContent(xhtmlString, xhtmlWrapperClass, blocksWrapperClass, blockTypesToExclude);
             }
 
-            return TransformHtmlString(xhtmlString.ToHtmlString(), html);
+            return TransformHtmlString(html.XhtmlString(xhtmlString).ToHtmlString(), html);
         }
 
         public static XhtmlString WrapContent(XhtmlString xhtmlString,
@@ -53,7 +57,7 @@ namespace Forte.EpiCommonUtils.Infrastructure.HtmlTransformations
                 ? blockWrapperEnd
                 : textWrapperEnd);
 
-            for (var i = xhtmlString.Fragments.Count-3; i >= 0 ; i--)
+            for (var i = xhtmlString.Fragments.Count - 3; i >= 0; i--)
             {
                 var currentFragment = xhtmlString.Fragments[i];
                 var isCurrentBlock = currentFragment is ContentFragment;
@@ -61,18 +65,19 @@ namespace Forte.EpiCommonUtils.Infrastructure.HtmlTransformations
                 if (!isCurrentBlock && string.IsNullOrWhiteSpace(currentFragment.InternalFormat))
                     continue;
 
-                if (isCurrentBlock && blockTypesToExclude.Any(t => t.IsInstanceOfType(((ContentFragment) currentFragment).GetContent())))
+                if (isCurrentBlock && blockTypesToExclude.Any(t =>
+                        t.IsInstanceOfType(((ContentFragment)currentFragment).GetContent())))
                     continue;
 
                 if (isCurrentBlock)
                 {
-                    xhtmlString.Fragments.Insert(i+1, isNextBlock ? blockWrapperStart : textWrapperStart);
-                    xhtmlString.Fragments.Insert(i+1, blockWrapperEnd);
+                    xhtmlString.Fragments.Insert(i + 1, isNextBlock ? blockWrapperStart : textWrapperStart);
+                    xhtmlString.Fragments.Insert(i + 1, blockWrapperEnd);
                 }
-                else if(isNextBlock)
+                else if (isNextBlock)
                 {
-                    xhtmlString.Fragments.Insert(i+1, blockWrapperStart);
-                    xhtmlString.Fragments.Insert(i+1, textWrapperEnd);
+                    xhtmlString.Fragments.Insert(i + 1, blockWrapperStart);
+                    xhtmlString.Fragments.Insert(i + 1, textWrapperEnd);
                 }
 
                 isNextBlock = isCurrentBlock;
@@ -80,6 +85,18 @@ namespace Forte.EpiCommonUtils.Infrastructure.HtmlTransformations
 
             xhtmlString.Fragments.Insert(0, isNextBlock ? blockWrapperStart : textWrapperStart);
             return xhtmlString;
+        }
+
+        public static string ToHtmlString(this IHtmlContent content)
+        {
+            if (content is HtmlString htmlString)
+            {
+                return htmlString.Value;
+            }
+
+            using var writer = new StringWriter();
+            content.WriteTo(writer, HtmlEncoder.Default);
+            return writer.ToString();
         }
 
         private static HtmlString TransformHtmlString(string htmlString, IHtmlHelper html)
@@ -90,7 +107,8 @@ namespace Forte.EpiCommonUtils.Infrastructure.HtmlTransformations
             return TransformHtmlString(htmlString, html, htmlTransformations);
         }
 
-        private static HtmlString TransformHtmlString(string htmlString, IHtmlHelper html, IEnumerable<IHtmlTransformation> transformations)
+        private static HtmlString TransformHtmlString(string htmlString, IHtmlHelper html,
+            IEnumerable<IHtmlTransformation> transformations)
         {
             if (string.IsNullOrEmpty(htmlString))
             {
@@ -105,7 +123,7 @@ namespace Forte.EpiCommonUtils.Infrastructure.HtmlTransformations
                 return new HtmlString(string.Empty);
             }
 
-            var htmlElement = (IHtmlElement) htmlFragment.First().Parent;
+            var htmlElement = (IHtmlElement)htmlFragment.First().Parent;
             foreach (var transformation in transformations)
             {
                 transformation.Apply(htmlElement, html);
