@@ -1,12 +1,15 @@
 ﻿using System;
 using Forte.EpiCommonUtils.Infrastructure;
+using Forte.EpiCommonUtils.Infrastructure.Policies;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Forte.EpiCommonUtils
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddEpiCommonUtils(this IServiceCollection services, Action<EpiCommonUtilsOptions> configurationAction = null)
+        public static IServiceCollection AddEpiCommonUtils(this IServiceCollection services,
+            Action<EpiCommonUtilsOptions> configurationAction = null, bool indexAsDefaultAction = true)
         {
             var epiCommonUtilsOptions = new EpiCommonUtilsOptions
             {
@@ -19,6 +22,11 @@ namespace Forte.EpiCommonUtils
             services.AddSingleton(epiCommonUtilsOptions);
             services.AddSingleton<WebpackManifest>();
             services.AddSingleton<Webpack>();
+
+            if (indexAsDefaultAction)
+            {
+                services.AddSingleton<MatcherPolicy, ActionMatcherPolicy>();
+            }
 
             return services;
         }
