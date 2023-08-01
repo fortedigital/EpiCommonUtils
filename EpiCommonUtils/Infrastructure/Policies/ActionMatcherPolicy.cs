@@ -9,6 +9,10 @@ using Microsoft.AspNetCore.Routing.Matching;
 
 namespace Forte.EpiCommonUtils.Infrastructure.Policies;
 
+/// <summary>
+/// Solution based on thread:
+/// https://world.optimizely.com/forum/developer-forum/cms-12/thread-container/2023/2/migration-to-cms-12----after-calling-an-action-getpost-currentpage-parameter-always-comes-as-null/
+/// </summary>
 public class ActionMatcherPolicy : MatcherPolicy, IEndpointSelectorPolicy
 {
     public override int Order => 100;
@@ -18,26 +22,29 @@ public class ActionMatcherPolicy : MatcherPolicy, IEndpointSelectorPolicy
 
     public Task ApplyAsync(HttpContext httpContext, CandidateSet candidates)
     {
-        if (candidates.Count <= 1) return Task.CompletedTask;
+        if (candidates.Count <= 1)
+        {
+            return Task.CompletedTask;
+        }
 
-        for (int index = 0; index < candidates.Count; ++index)
+        var lastSegment = httpContext.Request.Path.Value?.Split('/').Last();
+        
+        for (var index = 0; index < candidates.Count; ++index)
         {
             var metadata = candidates[index].Endpoint.Metadata.GetMetadata<ControllerActionDescriptor>();
 
-            if (metadata != null)
-            {
-                var lastSegment = httpContext.Request.Path.Value?.Split('/').Last();
-                var actionName = metadata.ActionName;
+            if (metadata == null) continue;
+            
+            var actionName = metadata.ActionName;
 
-                if (lastSegment != null && lastSegment.Equals(actionName, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    candidates.SetValidity(index, true);
-                }
-                else
-                {
-                    candidates.SetValidity(index,
-                        actionName.Equals("Index", StringComparison.InvariantCultureIgnoreCase));
-                }
+            if (lastSegment != null && lastSegment.Equals(actionName, StringComparison.InvariantCultureIgnoreCase))
+            {
+                candidates.SetValidity(index, true);
+            }
+            else
+            {
+                candidates.SetValidity(index,
+                    actionName.Equals("Index", StringComparison.InvariantCultureIgnoreCase));
             }
         }
 
