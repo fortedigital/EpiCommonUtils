@@ -4,5 +4,6 @@ namespace Forte.EpiCommonUtils
     {
         public string WebpackManifestPath { get; set; }
         public string WebpackDevServerUrl { get; set; }
+        public bool IndexAsDefaultAction { get; set; }
     }
 }
