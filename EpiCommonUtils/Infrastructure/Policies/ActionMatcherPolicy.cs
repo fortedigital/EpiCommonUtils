@@ -17,8 +17,10 @@ public class ActionMatcherPolicy : MatcherPolicy, IEndpointSelectorPolicy
 {
     public override int Order => 100;
 
-    public bool AppliesToEndpoints(IReadOnlyList<Endpoint> endpoints) => !endpoints.Any(e =>
-        e.DisplayName != null && !e.DisplayName.StartsWith("episerver", StringComparison.InvariantCultureIgnoreCase));
+    public bool AppliesToEndpoints(IReadOnlyList<Endpoint> endpoints) => endpoints.Any(e => e.Metadata
+        .GetMetadata<ControllerActionDescriptor>()
+        ?.ControllerTypeInfo.AsType().IsPageController() ?? false);
+
 
     public Task ApplyAsync(HttpContext httpContext, CandidateSet candidates)
     {
@@ -28,13 +30,13 @@ public class ActionMatcherPolicy : MatcherPolicy, IEndpointSelectorPolicy
         }
 
         var lastSegment = httpContext.Request.Path.Value?.Split('/').Last();
-        
+
         for (var index = 0; index < candidates.Count; ++index)
         {
             var metadata = candidates[index].Endpoint.Metadata.GetMetadata<ControllerActionDescriptor>();
 
             if (metadata == null) continue;
-            
+
             var actionName = metadata.ActionName;
 
             if (lastSegment != null && lastSegment.Equals(actionName, StringComparison.InvariantCultureIgnoreCase))
