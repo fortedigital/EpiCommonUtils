@@ -17,12 +17,8 @@ You can pass optional Action which will change default values for `EpiCommonUtil
 
 ### Treating Index() as default action
 
-In EPiServer 12, Index() is not treated as default action in controllers, which inherit from PageController<>. So when you create 2 methods in single controller and Index method is placed as second, then trying to render view without typing "/index" at the end would cause first action to invoke.
-If you would like to turn off this behaviour, then during configuration of services you should register package by running
-
-```c#
-services.AddEpiCommonUtils(options => options.IndexAsDefaultAction = false);
-```
+In Optimizely CMS 12, Index is not treated as default action in controllers, which inherit from PageController<>. So when you create 2 methods in single controller and Index method is placed as second, then trying to render view without typing "/index" at the end would cause first action to invoke.
+By default our package changes this behavior and makes Index a default action despite the order of methods in Controller. If you would like to revert to Optimizely's default convention, you can disable our logic by passing ```IndexAsDefaultAction``` with false value
 
 ### Validation attributes
 There are a couple of additional validation attributes for Episerver model classes available:
