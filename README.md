@@ -15,6 +15,15 @@ services.AddEpiCommonUtils();
 You can pass optional Action which will change default values for `EpiCommonUtilsOptions` 
 ## Key features
 
+### Treating Index() as default action
+
+In EPiServer 12, Index() is not treated as default action in controllers, which inherit from PageController<>. So when you create 2 methods in single controller and Index method is placed as second, then trying to render view without typing "/index" at the end would cause first action to invoke.
+If you would like to turn off this behaviour, then during configuration of services you should register package by running
+
+```c#
+services.AddEpiCommonUtils(options => options.IndexAsDefaultAction = false);
+```
+
 ### Validation attributes
 There are a couple of additional validation attributes for Episerver model classes available:
 
